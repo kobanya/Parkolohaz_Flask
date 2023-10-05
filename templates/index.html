@@ -6,42 +6,76 @@
     <title>Parkolóház</title>
     <style>
         /* CSS stílusok itt */
+        .container {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+        .container {
+        display: flex;
+        flex-direction: row; /* Alapértelmezett irány (vízszintes) */
+        }
+
+        .container > div:first-child {
+         flex: 8; /* A bal konténer 70% szélességet kap */
+        }
+
+        .container > div:last-child {
+         flex: 2; /* A jobb konténer 30% szélességet kap */
+        }
+
+        /* Stílus a bal oldali tartalomhoz */
+        .bal_oldal {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid lightgray;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        /* Stílus a jobb oldali tartalomhoz */
+        .jobb_oldal {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid lightgray;
+            border-radius: 5px;
+        }
+
         .kartya {
             background-color: #f2f2f2;
             border: 1px solid #ddd;
             padding: 10px;
-            border-radius: 10px; /* Kerekített szélek */
-            width: 200px; /* Szélesség 200px */
-            height: 70px; /* Magasság */
-            display: inline-block; /* Egymás mellett helyezkedés */
-            margin-right: 10px; /* Jobb margó a kártyák között */
+            border-radius: 10px;
+            width: 200px;
+            height: 70px;
+            display: inline-block;
+            margin-right: 10px;
             margin-bottom: 10px;
-            position: relative; /* Pozíció beállítása relatívvá, hogy a gyerekeket a szülőhöz viszonyítva pozicionálhassuk */
+            position: relative;
         }
 
         .szabad {
-            color: green; /* Szövegszín */
-            background-color: #e0ffe0; /* Nagyon világoszöld háttérszín */
-            border: 2px solid green; /* zöld keret hozzáadása */
+            color: green;
+            background-color: #e0ffe0;
+            border: 2px solid green;
         }
 
         .foglalt {
             color: red;
-            border: 2px solid red; /* Vörös keret hozzáadása */
+            border: 2px solid red;
         }
 
         .ikon {
-            position: absolute; /* Pozíció beállítása abszolúttá, hogy szabadon pozicionálhassuk a szülőhöz képest */
-            top: 5px; /* A kártya felső széléhez rögzítjük az ikont */
-            right: 5px; /* A kártya jobb széléhez rögzítjük az ikont */
-            width: 10px; /* Ikon szélessége */
-            height: 10px; /* Ikon magassága */
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 10px;
+            height: 10px;
             padding: 10px;
-            background-image: url('static/parkolo.png'); /* Ikon képének hivatkozása */
-            background-size: cover; /* Az ikon képét kitölti az ikon méreteivel */
+            background-image: url('static/parkolo.png');
+            background-size: cover;
         }
 
-        /* Módosítás: Foglalt kártyákhoz tartozó ikon */
         .tiltott_behajtas {
             position: absolute;
             top: 5px;
@@ -51,25 +85,26 @@
             padding: 10px;
             background-image: url('static/behajtani_tilos.png');
             background-size: cover;
-                    }
-
-        /* Módosítás: Rendszám nagyobb betűméret */
-        .kartya .rendszam {
-            font-size: 18px; /* pixeles betűméret  */
-            font-weight: bold; /* Vastag (bold) betűtípus */
         }
 
+        .kartya .rendszam {
+            font-size: 18px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
-    <div style="display: flex;">
-        <div style="flex: 1;">
+    <div class="container">
+        <!-- Bal oldali tartalom -->
+        <div class="bal_oldal">
             <h2>Parkolóhelyek</h2>
             <div id="parkolohelyek">
                 <!-- Parkolóhelyek megjelenítése itt -->
             </div>
         </div>
-        <div style="flex: 1;">
+
+        <!-- Jobb oldali tartalom -->
+        <div class="jobb_oldal">
             <h2>A jármű rendszáma</h2>
             <div>
                 <input type="text" id="rendszam" placeholder="Rendszám" />
