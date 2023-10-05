@@ -1,0 +1,15 @@
+{
+    "parkolohelyek": [
+        {"szam": "P1", "foglalt": false, "rendszam": ""},
+        {"szam": "P2", "foglalt": false, "rendszam": ""},
+        {"szam": "P3", "foglalt": false, "rendszam": ""},
+        {"szam": "P4", "foglalt": false, "rendszam": ""},
+        {"szam": "P5", "foglalt": false, "rendszam": ""},
+        {"szam": "P6", "foglalt": false, "rendszam": ""},
+        {"szam": "P7", "foglalt": false, "rendszam": ""},
+        {"szam": "P8", "foglalt": false, "rendszam": ""},
+        {"szam": "P9", "foglalt": false, "rendszam": ""},
+        {"szam": "P10", "foglalt": false, "rendszam": ""}
+    ]
+}
+
