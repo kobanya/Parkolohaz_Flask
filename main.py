@@ -25,7 +25,7 @@ def index():
 def api_ellenorzes():
     try:
         data = request.get_json()
-        rendszam = data.get('rendszam', '')
+        rendszam = data.get('rendszam', '').upper() #nagybetűsítés
 
         for hely in parkolohelyek['parkolohelyek']:
             if hely['rendszam'] == rendszam:

@@ -17,8 +17,8 @@
         },
         {
             "szam": "P4",
-            "foglalt": false,
-            "rendszam": ""
+            "foglalt": true,
+            "rendszam": "ZZJ586"
         },
         {
             "szam": "P5",
@@ -37,13 +37,13 @@
         },
         {
             "szam": "P8",
-            "foglalt": false,
-            "rendszam": ""
+            "foglalt": true,
+            "rendszam": "RTE889"
         },
         {
             "szam": "P9",
-            "foglalt": false,
-            "rendszam": ""
+            "foglalt": true,
+            "rendszam": "ABC856"
         },
         {
             "szam": "P10",
@@ -52,8 +52,8 @@
         },
         {
             "szam": "P11",
-            "foglalt": false,
-            "rendszam": ""
+            "foglalt": true,
+            "rendszam": "ZSG856"
         },
         {
             "szam": "P12",

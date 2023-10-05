@@ -165,9 +165,15 @@
             </div>
 
             <!-- Módosítás: Megjelenítjük a parkolóhely számot vagy az "MEGTELET" üzenetet behajtáskor -->
-            <h2>Ide álljon be: <span id="parkolohely_szam"></span></h2>
+            <h2> <span id="belepes_kihajtas"></span></h2>
+            <!-- Módosítás: Megjelenítjük a parkolóhely számot vagy az "Ide álljon be:" üzenetet behajtáskor -->
 
+
+        <!-- Módosítás: Megjelenítjük a fizetendő díjat behajtáskor vagy kihajtáskor -->
             <h2><span id="fizetendo_dij"></span></h2>
+
+
+
             <!-- Díj megjelenítése itt -->
         </div>
     </div>
@@ -200,7 +206,7 @@
 
 
 
-    <script>
+        <script>
         // JavaScript kód itt
 
         // Függvény a naplóadatok betöltéséhez a JSON fájlból
@@ -304,16 +310,16 @@
                         var response = JSON.parse(xhr.responseText);
                         if (response.status === "MEGTELET") {
                             // Módosítás: Ha megtelt a parkolóház, megjelenítjük az "MEGTELET" üzenetet
-                            document.getElementById('parkolohely_szam').textContent = "MEGTELET";
+                            document.getElementById('belepes_kihajtas').textContent = "MEGTELET";
                             document.getElementById('fizetendo_dij').textContent = '';
                         } else if (response.status === "Behajtás") {
                             // Módosítás: Megjelenítjük a parkolóhely számot behajtáskor
-                            document.getElementById('parkolohely_szam').textContent = response.parkolohely_szam;
+                            document.getElementById('belepes_kihajtas').textContent = `Ide álljon be: ${response.parkolohely_szam}`;
                             // Módosítás: Megjelenítjük a fizetendő díjat behajtáskor
                             document.getElementById('fizetendo_dij').textContent = '';
                         } else {
                             // Módosítás: Megjelenítjük a fizetendő díjat kihajtáskor
-                            document.getElementById('fizetendo_dij').textContent = 'Fizetendő díj: ' + response.dij + ' Ft';
+                            document.getElementById('fizetendo_dij').textContent = `Fizetendő díj: ${response.dij} Ft`;
                         }
                     } else {
                         // Hiba történt
@@ -325,5 +331,6 @@
         });
 
     </script>
+
 </body>
 </html>
