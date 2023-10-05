@@ -3,17 +3,17 @@
         {
             "szam": "P1",
             "foglalt": true,
-            "rendszam": "DFD785"
+            "rendszam": "CDY999"
         },
         {
             "szam": "P2",
             "foglalt": true,
-            "rendszam": "AAEI084"
+            "rendszam": "IZA362"
         },
         {
             "szam": "P3",
             "foglalt": true,
-            "rendszam": "IZA362"
+            "rendszam": "AAEI084"
         },
         {
             "szam": "P4",
@@ -22,8 +22,8 @@
         },
         {
             "szam": "P5",
-            "foglalt": true,
-            "rendszam": "IZA-666"
+            "foglalt": false,
+            "rendszam": ""
         },
         {
             "szam": "P6",
@@ -32,13 +32,13 @@
         },
         {
             "szam": "P7",
-            "foglalt": true,
-            "rendszam": "LCI-753"
+            "foglalt": false,
+            "rendszam": ""
         },
         {
             "szam": "P8",
-            "foglalt": true,
-            "rendszam": "IZA-555"
+            "foglalt": false,
+            "rendszam": ""
         },
         {
             "szam": "P9",
@@ -57,8 +57,8 @@
         },
         {
             "szam": "P12",
-            "foglalt": true,
-            "rendszam": "SDG-5237"
+            "foglalt": false,
+            "rendszam": ""
         }
     ]
 }

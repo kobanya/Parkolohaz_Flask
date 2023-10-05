@@ -11,17 +11,18 @@
             justify-content: space-between;
             padding: 20px;
         }
+
         .container {
-        display: flex;
-        flex-direction: row; /* Alapértelmezett irány (vízszintes) */
+            display: flex;
+            flex-direction: row; /* Alapértelmezett irány (vízszintes) */
         }
 
         .container > div:first-child {
-         flex: 8; /* A bal konténer 70% szélességet kap */
+            flex: 8; /* A bal konténer 70% szélességet kap */
         }
 
         .container > div:last-child {
-         flex: 2; /* A jobb konténer 30% szélességet kap */
+            flex: 2; /* A jobb konténer 30% szélességet kap */
         }
 
         /* Stílus a bal oldali tartalomhoz */
@@ -39,6 +40,13 @@
             padding: 10px;
             border: 1px solid lightgray;
             border-radius: 5px;
+        }
+
+        .also_kontener {
+            margin-top: 20px;
+            border: 1px solid lightgray;
+            border-radius: 5px;
+            padding: 10px;
         }
 
         .kartya {
@@ -97,7 +105,7 @@
     <div class="container">
         <!-- Bal oldali tartalom -->
         <div class="bal_oldal">
-            <h2>Parkolóhelyek</h2>
+            <h2>A parkolóhelyek foglaltsága</h2>
             <div id="parkolohelyek">
                 <!-- Parkolóhelyek megjelenítése itt -->
             </div>
@@ -119,45 +127,59 @@
         </div>
     </div>
 
+    <!-- Alsó konténer -->
+    <div class="also_kontener">
+        <h2>Napló adatok</h2>
+        <table id="naplo_adatok">
+            <tr>
+                <th>Dátum</th>
+                <th>Rendszám</th>
+                <th>Bejövetel</th>
+                <th>Kilépés</th>
+            </tr>
+            <!-- A CSV fájl adatai ide lesznek betöltve JavaScript segítségével -->
+        </table>
+    </div>
+
     <script>
         // JavaScript kód itt
-        document.getElementById('belepes_gomb').addEventListener('click', function() {
-            // AJAX hívás a Flask szerverhez a QR kód elküldésével
-            var rendszam = document.getElementById('rendszam').value;
+
+        // Függvény a naplóadatok betöltéséhez a CSV fájlból
+        function betoltNaploAdatok() {
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/ellenorzes', true);
-            xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            xhr.open('GET', 'naplo.csv', true);
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
                     if (xhr.status === 200) {
-                        // Sikeres válasz
-                        var response = JSON.parse(xhr.responseText);
-                        if (response.status === "MEGTELET") {
-                            // Módosítás: Ha megtelt a parkolóház, megjelenítjük az "MEGTELET" üzenetet
-                            document.getElementById('parkolohely_szam').textContent = "MEGTELET";
-                            document.getElementById('fizetendo_dij').textContent = '';
-                        } else if (response.status === "Behajtás") {
-                            // Módosítás: Megjelenítjük a parkolóhely számot behajtáskor
-                            document.getElementById('parkolohely_szam').textContent = response.parkolohely_szam;
-                            // Módosítás: Megjelenítjük a fizetendő díjat behajtáskor
-                            document.getElementById('fizetendo_dij').textContent = '';
-                        } else {
-                            // Módosítás: Megjelenítjük a fizetendő díjat kihajtáskor
-                            document.getElementById('fizetendo_dij').textContent = 'Fizetendő díj: ' + response.dij + ' Ft';
+                        // Sikeres válasz, a CSV fájl tartalma itt lesz kezelve
+                        var csvData = xhr.responseText;
+                        var lines = csvData.split('\n');
+                        var table = document.getElementById('naplo_adatok');
+
+                        for (var i = 1; i < lines.length; i++) {
+                            var line = lines[i].split(',');
+                            if (line.length === 4) {
+                                var row = table.insertRow(-1);
+                                var dateCell = row.insertCell(0);
+                                var rendszamCell = row.insertCell(1);
+                                var bejovetelCell = row.insertCell(2);
+                                var kilepesCell = row.insertCell(3);
+
+                                dateCell.innerHTML = line[0];
+                                rendszamCell.innerHTML = line[1];
+                                bejovetelCell.innerHTML = line[2];
+                                kilepesCell.innerHTML = line[3];
+                            }
                         }
                     } else {
-                        // Hiba történt
-                        alert('Hiba történt: ' + xhr.status);
+                        console.error('Hiba történt a napló adatok betöltése közben.');
                     }
                 }
             };
-            xhr.send(JSON.stringify({ rendszam: rendszam }));
-        });
+            xhr.send();
+        }
 
-        // Módosítás: Az oldal betöltésekor hívjuk meg a parkolóhelyeket megjelenítő funkciót
-        window.addEventListener('load', megjelenitParkolohelyeket);
-
-        // Módosítás: Megjelenítjük a parkolóhelyeket a JSON fájlból
+        // Függvény a parkolóhelyek megjelenítéséhez
         function megjelenitParkolohelyeket() {
             var xhr = new XMLHttpRequest();
             xhr.open('GET', '/parkolohelyek', true);
@@ -204,6 +226,47 @@
             };
             xhr.send();
         }
+
+        // Az oldal betöltésekor betöltjük a napló adatokat és megjelenítjük a parkolóhelyeket
+        window.addEventListener('load', function() {
+            betoltNaploAdatok();
+            megjelenitParkolohelyeket();
+        });
+
+        // JavaScript kód itt
+        document.getElementById('belepes_gomb').addEventListener('click', function() {
+            // AJAX hívás a Flask szerverhez a QR kód elküldésével
+            var rendszam = document.getElementById('rendszam').value;
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/ellenorzes', true);
+            xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        // Sikeres válasz
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.status === "MEGTELET") {
+                            // Módosítás: Ha megtelt a parkolóház, megjelenítjük az "MEGTELET" üzenetet
+                            document.getElementById('parkolohely_szam').textContent = "MEGTELET";
+                            document.getElementById('fizetendo_dij').textContent = '';
+                        } else if (response.status === "Behajtás") {
+                            // Módosítás: Megjelenítjük a parkolóhely számot behajtáskor
+                            document.getElementById('parkolohely_szam').textContent = response.parkolohely_szam;
+                            // Módosítás: Megjelenítjük a fizetendő díjat behajtáskor
+                            document.getElementById('fizetendo_dij').textContent = '';
+                        } else {
+                            // Módosítás: Megjelenítjük a fizetendő díjat kihajtáskor
+                            document.getElementById('fizetendo_dij').textContent = 'Fizetendő díj: ' + response.dij + ' Ft';
+                        }
+                    } else {
+                        // Hiba történt
+                        alert('Hiba történt: ' + xhr.status);
+                    }
+                }
+            };
+            xhr.send(JSON.stringify({ rendszam: rendszam }));
+        });
+
     </script>
 </body>
 </html>
