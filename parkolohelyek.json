@@ -3,12 +3,12 @@
         {
             "szam": "P1",
             "foglalt": true,
-            "rendszam": "CDY999"
+            "rendszam": "IZA326"
         },
         {
             "szam": "P2",
-            "foglalt": true,
-            "rendszam": "IZA362"
+            "foglalt": false,
+            "rendszam": ""
         },
         {
             "szam": "P3",
@@ -22,18 +22,18 @@
         },
         {
             "szam": "P5",
-            "foglalt": false,
-            "rendszam": ""
+            "foglalt": true,
+            "rendszam": "CMG456"
         },
         {
             "szam": "P6",
-            "foglalt": false,
-            "rendszam": ""
+            "foglalt": true,
+            "rendszam": "EIH724"
         },
         {
             "szam": "P7",
-            "foglalt": false,
-            "rendszam": ""
+            "foglalt": true,
+            "rendszam": "EUT296"
         },
         {
             "szam": "P8",

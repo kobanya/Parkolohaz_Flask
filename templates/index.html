@@ -28,10 +28,11 @@
         /* Stílus a bal oldali tartalomhoz */
         .bal_oldal {
             flex: 1;
-            padding: 10px;
+            padding-left: 10px;
             border: 1px solid lightgray;
             border-radius: 5px;
             margin-right: 10px;
+            background-color: #f2f2f2;
         }
 
         /* Stílus a jobb oldali tartalomhoz */
@@ -40,14 +41,32 @@
             padding: 10px;
             border: 1px solid lightgray;
             border-radius: 5px;
+            background-color: #f2f2f2;
         }
 
         .also_kontener {
-            margin-top: 20px;
+            height: 240px; /* Fix magasság beállítása */
             border: 1px solid lightgray;
             border-radius: 5px;
-            padding: 10px;
+            padding: 5px;
+            overflow: auto; /* Görgethetőség engedélyezése */
+            background-color: #f2f2f2;
+            margin-left: 20px;
+            margin-right: 20px;
+            margin-top: 5px;
         }
+        body {
+            background-color: white;
+        }
+
+
+
+        table {
+            width: 100%; /* A táblázat kitölti a szülő konténert */
+            overflow-y: auto;
+        }
+
+
 
         .kartya {
             background-color: #f2f2f2;
@@ -71,6 +90,7 @@
         .foglalt {
             color: red;
             border: 2px solid red;
+            background-color: mistyrose; /* Halványabb piros háttérszín */
         }
 
         .ikon {
@@ -99,13 +119,38 @@
             font-size: 18px;
             font-weight: bold;
         }
+        #also_kontener table {
+             max-height: 300px ;
+            overflow-y: auto;
+        }
+        #naplo_adatok th {
+             text-align: left;
+        }
+        table, th, td {
+         border: 1px solid #ccc; /* Minden cella és fejléc szegélye 1px vastag szürke */
+         border-collapse: collapse; /* Összeomló hatás a cellák közötti szegélyek kialakításához */
+        }
+        #rendszam {
+            font-size: 19px; /* Itt állíthatod be a kívánt betűméretet */
+            padding:10px;
+        }
+        #belepes_gomb {
+             padding: 10px 20px; /*  (felül/alul, jobbra/balra) */
+             margin-top: 10px;
+             margin-left: 0px; /* Bal oldali margin 0px */
+        }
+
+
+
+
+
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Bal oldali tartalom -->
         <div class="bal_oldal">
-            <h2>A parkolóhelyek foglaltsága</h2>
+            <h3>A parkolóhelyek foglaltsága</h3>
             <div id="parkolohelyek">
                 <!-- Parkolóhelyek megjelenítése itt -->
             </div>
@@ -129,48 +174,60 @@
 
     <!-- Alsó konténer -->
     <div class="also_kontener">
-        <h2>Napló adatok</h2>
+    <h3>Napló adatok</h3>
+    <div style="overflow-x: auto;">
         <table id="naplo_adatok">
-            <tr>
-                <th>Dátum</th>
-                <th>Rendszám</th>
-                <th>Bejövetel</th>
-                <th>Kilépés</th>
-            </tr>
-            <!-- A CSV fájl adatai ide lesznek betöltve JavaScript segítségével -->
+            <thead>
+                <tr>
+                    <th>Rendszám</th>
+                    <th>Behajtás</th>
+                    <th>Kihajtás</th>
+                    <th>Parkolóhely</th>
+                    <th>Parkolódíj</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- A JSON fájl adatai ide lesznek betöltve JavaScript segítségével -->
+            </tbody>
         </table>
     </div>
+</div>
+
+
+
+
+
+
+
 
     <script>
         // JavaScript kód itt
 
-        // Függvény a naplóadatok betöltéséhez a CSV fájlból
+        // Függvény a naplóadatok betöltéséhez a JSON fájlból
         function betoltNaploAdatok() {
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', 'naplo.csv', true);
+            xhr.open('GET', '/naplo_adatok', true); // Az új végpontot használjuk
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
                     if (xhr.status === 200) {
-                        // Sikeres válasz, a CSV fájl tartalma itt lesz kezelve
-                        var csvData = xhr.responseText;
-                        var lines = csvData.split('\n');
+                        // Sikeres válasz, a JSON fájl tartalma itt lesz kezelve
+                        var naploAdatok = JSON.parse(xhr.responseText);
                         var table = document.getElementById('naplo_adatok');
 
-                        for (var i = 1; i < lines.length; i++) {
-                            var line = lines[i].split(',');
-                            if (line.length === 4) {
-                                var row = table.insertRow(-1);
-                                var dateCell = row.insertCell(0);
-                                var rendszamCell = row.insertCell(1);
-                                var bejovetelCell = row.insertCell(2);
-                                var kilepesCell = row.insertCell(3);
+                        naploAdatok.forEach(function(data) {
+                            var row = table.insertRow(-1);
+                            var rendszamCell = row.insertCell(0);
+                            var bejovetelCell = row.insertCell(1);
+                            var kilepesCell = row.insertCell(2);
+                            var parkolohelyCell = row.insertCell(3);
+                            var parkolodijCell = row.insertCell(4); // Új cella hozzáadva a parkolódíjhoz
 
-                                dateCell.innerHTML = line[0];
-                                rendszamCell.innerHTML = line[1];
-                                bejovetelCell.innerHTML = line[2];
-                                kilepesCell.innerHTML = line[3];
-                            }
-                        }
+                            rendszamCell.textContent = data.rendszam;
+                            bejovetelCell.textContent = data.status === "Behajtás" ? data.idopont : "";
+                            kilepesCell.textContent = data.status === "Kihajtás" ? data.idopont : "";
+                            parkolohelyCell.textContent = data.parkolohely; // Parkolóhely hozzáadása
+                            parkolodijCell.textContent = data.parkolodij; // Parkolódíj hozzáadása
+                        });
                     } else {
                         console.error('Hiba történt a napló adatok betöltése közben.');
                     }
