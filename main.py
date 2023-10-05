@@ -3,7 +3,9 @@ import json
 from datetime import datetime
 from flask import Flask, render_template, request, jsonify
 
-app = Flask(__name__)
+
+app = Flask(__name__, static_url_path='/static')
+
 
 # Napló fájl elérési útvonala
 naplo_file = 'naplo.csv'

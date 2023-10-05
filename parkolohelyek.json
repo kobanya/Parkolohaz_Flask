@@ -12,13 +12,13 @@
         },
         {
             "szam": "P3",
-            "foglalt": false,
-            "rendszam": ""
+            "foglalt": true,
+            "rendszam": "IZA362"
         },
         {
             "szam": "P4",
-            "foglalt": true,
-            "rendszam": "IZA-362"
+            "foglalt": false,
+            "rendszam": ""
         },
         {
             "szam": "P5",
@@ -27,8 +27,8 @@
         },
         {
             "szam": "P6",
-            "foglalt": true,
-            "rendszam": "TMI-528"
+            "foglalt": false,
+            "rendszam": ""
         },
         {
             "szam": "P7",
@@ -47,8 +47,8 @@
         },
         {
             "szam": "P10",
-            "foglalt": true,
-            "rendszam": "JUH-895"
+            "foglalt": false,
+            "rendszam": ""
         },
         {
             "szam": "P11",
