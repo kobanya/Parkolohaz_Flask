@@ -7,33 +7,33 @@
         },
         {
             "szam": "P2",
-            "foglalt": false,
-            "rendszam": ""
+            "foglalt": true,
+            "rendszam": "AAA-123"
         },
         {
             "szam": "P3",
             "foglalt": true,
-            "rendszam": "KDR-77"
+            "rendszam": "CDF-852"
         },
         {
             "szam": "P4",
-            "foglalt": false,
-            "rendszam": ""
+            "foglalt": true,
+            "rendszam": "IZA-362"
         },
         {
             "szam": "P5",
-            "foglalt": false,
-            "rendszam": ""
+            "foglalt": true,
+            "rendszam": "BLA-765"
         },
         {
             "szam": "P6",
-            "foglalt": false,
-            "rendszam": ""
+            "foglalt": true,
+            "rendszam": "TMI-528"
         },
         {
             "szam": "P7",
-            "foglalt": false,
-            "rendszam": ""
+            "foglalt": true,
+            "rendszam": "LCI-753"
         },
         {
             "szam": "P8",
