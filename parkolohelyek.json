@@ -3,17 +3,17 @@
         {
             "szam": "P1",
             "foglalt": true,
-            "rendszam": "DDR-875"
+            "rendszam": "DFD785"
         },
         {
             "szam": "P2",
             "foglalt": true,
-            "rendszam": "AAA-123"
+            "rendszam": "AAEI084"
         },
         {
             "szam": "P3",
-            "foglalt": true,
-            "rendszam": "CDF-852"
+            "foglalt": false,
+            "rendszam": ""
         },
         {
             "szam": "P4",
@@ -23,7 +23,7 @@
         {
             "szam": "P5",
             "foglalt": true,
-            "rendszam": "BLA-765"
+            "rendszam": "IZA-666"
         },
         {
             "szam": "P6",
@@ -37,8 +37,8 @@
         },
         {
             "szam": "P8",
-            "foglalt": false,
-            "rendszam": ""
+            "foglalt": true,
+            "rendszam": "IZA-555"
         },
         {
             "szam": "P9",
@@ -47,8 +47,18 @@
         },
         {
             "szam": "P10",
+            "foglalt": true,
+            "rendszam": "JUH-895"
+        },
+        {
+            "szam": "P11",
             "foglalt": false,
             "rendszam": ""
+        },
+        {
+            "szam": "P12",
+            "foglalt": true,
+            "rendszam": "SDG-5237"
         }
     ]
 }

@@ -6,8 +6,20 @@
     <title>Parkolóház</title>
     <style>
         /* CSS stílusok itt */
+        .kartya {
+            background-color: #f2f2f2;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 10px; /* Kerekített szélek */
+            width: 200px; /* Szélesség 200px */
+            height: 70px; /* Magasság */
+            display: inline-block; /* Egymás mellett helyezkedés */
+            margin-right: 10px; /* Jobb margó a kártyák között */
+            margin-bottom: 10px;
+        }
         .szabad {
-            color: green;
+         color: green; /* Szövegszín */
+         background-color: #e0ffe0; /* Nagyon világoszöld háttérszín */
         }
         .foglalt {
             color: red;
@@ -18,17 +30,9 @@
     <div style="display: flex;">
         <div style="flex: 1;">
             <h2>Parkolóhelyek</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Parkolóhely</th>
-                        <th>Állapot</th>
-                    </tr>
-                </thead>
-                <tbody id="parkolohelyek">
-                    <!-- Parkolóhelyek megjelenítése itt -->
-                </tbody>
-            </table>
+            <div id="parkolohelyek">
+                <!-- Parkolóhelyek megjelenítése itt -->
+            </div>
         </div>
         <div style="flex: 1;">
             <h2>A jármű rendszáma</h2>
@@ -37,19 +41,15 @@
                 <button id="belepes_gomb">KÜLDÉS</button>
             </div>
 
-            <!-- Módosítás: Megjelenítjük a parkolóhely számot behajtáskor -->
-            <h2>Parkolóhely száma: <span id="parkolohely_szam"></span></h2>
+            <!-- Módosítás: Megjelenítjük a parkolóhely számot vagy az "MEGTELET" üzenetet behajtáskor -->
+            <h2>Ide álljon be: <span id="parkolohely_szam"></span></h2>
 
-            <h2><span id="fizetendo_dij"></span> </h2>
+            <h2><span id="fizetendo_dij"></span></h2>
             <!-- Díj megjelenítése itt -->
         </div>
     </div>
 
-    <!-- ... (a HTML kód ugyanaz marad) ... -->
-
-<!-- ... (a HTML kód ugyanaz marad) ... -->
-
-<script>
+    <script>
     // JavaScript kód itt
     document.getElementById('belepes_gomb').addEventListener('click', function() {
         // AJAX hívás a Flask szerverhez a QR kód elküldésével
@@ -62,13 +62,15 @@
                 if (xhr.status === 200) {
                     // Sikeres válasz
                     var response = JSON.parse(xhr.responseText);
-                    if (response.status === "Behajtás") {
+                    if (response.status === "MEGTELET") {
+                        // Módosítás: Ha megtelt a parkolóház, megjelenítjük az "MEGTELET" üzenetet
+                        document.getElementById('parkolohely_szam').textContent = "MEGTELET";
+                        document.getElementById('fizetendo_dij').textContent = '';
+                    } else if (response.status === "Behajtás") {
                         // Módosítás: Megjelenítjük a parkolóhely számot behajtáskor
                         document.getElementById('parkolohely_szam').textContent = response.parkolohely_szam;
                         // Módosítás: Megjelenítjük a fizetendő díjat behajtáskor
                         document.getElementById('fizetendo_dij').textContent = '';
-                        // Módosítás: Frissítjük a parkolóhelyeket
-                        megjelenitParkolohelyeket();
                     } else {
                         // Módosítás: Megjelenítjük a fizetendő díjat kihajtáskor
                         document.getElementById('fizetendo_dij').textContent = 'Fizetendő díj: ' + response.dij + ' Ft';
@@ -82,10 +84,10 @@
         xhr.send(JSON.stringify({ rendszam: rendszam }));
     });
 
-    // Módosítás: Frissítjük a parkolóhelyeket az oldal betöltésekor
-    megjelenitParkolohelyeket();
-
     // Módosítás: Az oldal betöltésekor hívjuk meg a parkolóhelyeket megjelenítő funkciót
+    window.addEventListener('load', megjelenitParkolohelyeket);
+
+    // Módosítás: Megjelenítjük a parkolóhelyeket a JSON fájlból
     function megjelenitParkolohelyeket() {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', '/parkolohelyek', true);
@@ -93,29 +95,23 @@
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 200) {
                     var parkolohelyek = JSON.parse(xhr.responseText);
-                    var parkolohelyekTabla = document.getElementById('parkolohelyek');
-                    parkolohelyekTabla.innerHTML = ''; // Táblázat ürítése
+                    var parkolohelyekDiv = document.getElementById('parkolohelyek');
+                    parkolohelyekDiv.innerHTML = ''; // Div ürítése
 
                     // Parkolóhelyek megjelenítése
                     parkolohelyek.parkolohelyek.forEach(function(hely) {
-                        var sor = document.createElement('tr');
-                        var helyCella = document.createElement('td');
-                        var allapotCella = document.createElement('td');
+                        var kartyaDiv = document.createElement('div');
+                        kartyaDiv.className = hely.foglalt ? 'kartya foglalt' : 'kartya szabad';
 
-                        helyCella.textContent = hely.szam;
+                        var helySzam = document.createElement('p');
+                        helySzam.textContent =  hely.szam;
 
-                        // Módosítás: Állapot színének beállítása
-                        if (hely.foglalt) {
-                            allapotCella.textContent = hely.rendszam; // Foglalt helyen a rendszám megjelenítése
-                            sor.className = 'foglalt';
-                        } else {
-                            allapotCella.textContent = 'SZABAD';
-                            sor.className = 'szabad';
-                        }
+                        var allapot = document.createElement('p');
+                        allapot.textContent = hely.foglalt ? hely.rendszam  : 'Állapot: Szabad';
 
-                        sor.appendChild(helyCella);
-                        sor.appendChild(allapotCella);
-                        parkolohelyekTabla.appendChild(sor);
+                        kartyaDiv.appendChild(helySzam);
+                        kartyaDiv.appendChild(allapot);
+                        parkolohelyekDiv.appendChild(kartyaDiv);
                     });
                 } else {
                     console.error('Hiba történt a parkolóhelyek lekérése közben.');
@@ -127,4 +123,3 @@
 </script>
 </body>
 </html>
-
