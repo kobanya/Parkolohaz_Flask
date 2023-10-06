@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parkolóház</title>
     <style>
-        /* CSS stílusok itt */
-        .container {
+        /* CSS stílusok (Formázás) itt */
+        .container {             /*  általános beállítás */
             display: flex;
             justify-content: space-between;
-            padding: 20px;
+            padding: 10px;
         }
 
         .container {
@@ -18,11 +18,11 @@
         }
 
         .container > div:first-child {
-            flex: 8; /* A bal konténer 70% szélességet kap */
+            flex: 8; /* A bal konténer 80% szélességet kap */
         }
 
         .container > div:last-child {
-            flex: 2; /* A jobb konténer 30% szélességet kap */
+            flex: 2; /* A jobb konténer 20% szélességet kap */
         }
 
         /* Stílus a bal oldali tartalomhoz */
@@ -45,18 +45,18 @@
         }
 
         .also_kontener {
-            height: 240px; /* Fix magasság beállítása */
+            height: 230px; /* Fix magasság beállítása */
             border: 1px solid lightgray;
             border-radius: 5px;
             padding: 5px;
             overflow: auto; /* Görgethetőség engedélyezése */
             background-color: #f2f2f2;
-            margin-left: 20px;
-            margin-right: 20px;
+            margin-left: 10px;    /* margók, oldalszél */
+            margin-right: 10px;
             margin-top: 5px;
         }
         body {
-            background-color: white;
+            background-color: white;    /*  az oldal háttérszíne */
         }
 
 
@@ -68,7 +68,7 @@
 
 
 
-        .kartya {
+        .kartya {         /* parkolóhely kártyák */
             background-color: #f2f2f2;
             border: 1px solid #ddd;
             padding: 10px;
@@ -81,19 +81,19 @@
             position: relative;
         }
 
-        .szabad {
+        .szabad {      /* a szabad kártyák stílusa */
             color: green;
             background-color: #e0ffe0;
             border: 2px solid green;
         }
 
-        .foglalt {
+        .foglalt {     /* a foglalt kártyák stílusa */
             color: red;
             border: 2px solid red;
             background-color: mistyrose; /* Halványabb piros háttérszín */
         }
 
-        .ikon {
+        .ikon {    /* A rendszám kártyán található P tábla ikon stílusa */
             position: absolute;
             top: 5px;
             right: 5px;
@@ -101,10 +101,10 @@
             height: 10px;
             padding: 10px;
             background-image: url('static/parkolo.png');
-            background-size: cover;
+            background-size: cover; /* a kép kitakarja a tartalmat */
         }
 
-        .tiltott_behajtas {
+        .tiltott_behajtas {   /* A rendszám kártyán található behajtani tilos tábla ikon stílusa */
             position: absolute;
             top: 5px;
             right: 5px;
@@ -115,15 +115,15 @@
             background-size: cover;
         }
 
-        .kartya .rendszam {
+        .kartya .rendszam {   /* A parkolóhely száma */
             font-size: 18px;
             font-weight: bold;
         }
-        #also_kontener table {
-             max-height: 300px ;
-            overflow-y: auto;
+        #also_kontener table {  /* A táblázat max magassága */
+            max-height: 300px ;
+            overflow-y: auto;   /* görgetősáv engedélyezése */
         }
-        #naplo_adatok th {
+        #naplo_adatok th {     /* a táblázat igazítása balra */
              text-align: left;
         }
         table, th, td {
@@ -131,18 +131,14 @@
          border-collapse: collapse; /* Összeomló hatás a cellák közötti szegélyek kialakításához */
         }
         #rendszam {
-            font-size: 19px; /* Itt állíthatod be a kívánt betűméretet */
+            font-size: 19px; /* Beviteli mező betűmérete */
             padding:10px;
         }
-        #belepes_gomb {
+        #belepes_gomb {           /* gomb méretezése */
              padding: 10px 20px; /*  (felül/alul, jobbra/balra) */
              margin-top: 10px;
-             margin-left: 0px; /* Bal oldali margin 0px */
+             margin-left: 0px;   /* Bal oldali margin 0px */
         }
-
-
-
-
 
     </style>
 </head>
@@ -152,7 +148,7 @@
         <div class="bal_oldal">
             <h3>A parkolóhelyek foglaltsága</h3>
             <div id="parkolohelyek">
-                <!-- Parkolóhelyek megjelenítése itt -->
+                <!-- Parkolóhely kártyák megjelenítése itt -->
             </div>
         </div>
 
@@ -169,11 +165,8 @@
             <!-- Módosítás: Megjelenítjük a parkolóhely számot vagy az "Ide álljon be:" üzenetet behajtáskor -->
 
 
-        <!-- Módosítás: Megjelenítjük a fizetendő díjat behajtáskor vagy kihajtáskor -->
+            <!-- Módosítás: Megjelenítjük a fizetendő díjat behajtáskor vagy kihajtáskor -->
             <h2><span id="fizetendo_dij"></span></h2>
-
-
-
             <!-- Díj megjelenítése itt -->
         </div>
     </div>
@@ -199,20 +192,13 @@
     </div>
 </div>
 
-
-
-
-
-
-
-
-        <script>
+<script>
         // JavaScript kód itt
 
         // Függvény a naplóadatok betöltéséhez a JSON fájlból
         function betoltNaploAdatok() {
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', '/naplo_adatok', true); // Az új végpontot használjuk
+            xhr.open('GET', '/naplo_adatok', true); // naplo_adatok végpontot használjuk GET metódussal
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
                     if (xhr.status === 200) {
@@ -296,14 +282,15 @@
             megjelenitParkolohelyeket();
         });
 
-        // JavaScript kód itt
+        // Input küldése ellenőrzésre
         document.getElementById('belepes_gomb').addEventListener('click', function() {
-            // AJAX hívás a Flask szerverhez a QR kód elküldésével
-            var rendszam = document.getElementById('rendszam').value;
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/ellenorzes', true);
-            xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-            xhr.onreadystatechange = function() {
+
+        // AJAX hívás a Flask szerverhez a rendszám elküldésével
+        var rendszam = document.getElementById('rendszam').value;
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/ellenorzes', true);
+        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+        xhr.onreadystatechange = function() {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
                     if (xhr.status === 200) {
                         // Sikeres válasz
@@ -330,7 +317,7 @@
             xhr.send(JSON.stringify({ rendszam: rendszam }));
         });
 
-    </script>
+</script>
 
 </body>
 </html>
