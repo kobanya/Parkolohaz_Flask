@@ -32,8 +32,8 @@
         },
         {
             "szam": "P7",
-            "foglalt": true,
-            "rendszam": "EUT296"
+            "foglalt": false,
+            "rendszam": ""
         },
         {
             "szam": "P8",
