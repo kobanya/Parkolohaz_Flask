@@ -118,6 +118,7 @@
         .kartya .rendszam {   /* A parkolóhely száma */
             font-size: 18px;
             font-weight: bold;
+
         }
         #also_kontener table {  /* A táblázat max magassága */
             max-height: 300px ;
@@ -131,8 +132,9 @@
          border-collapse: collapse; /* Összeomló hatás a cellák közötti szegélyek kialakításához */
         }
         #rendszam {
-            font-size: 19px; /* Beviteli mező betűmérete */
+            font-size: 25px; /* Beviteli mező betűmérete */
             padding:10px;
+
         }
         #belepes_gomb {           /* gomb méretezése */
              padding: 10px 20px; /*  (felül/alul, jobbra/balra) */
@@ -157,7 +159,8 @@
             <h2>A jármű rendszáma</h2>
             <div>
                 <input type="text" id="rendszam" placeholder="Rendszám" />
-                <button id="belepes_gomb">KÜLDÉS</button>
+               <!-- <button id="belepes_gomb" onClick="window.location.reload()">KÜLDÉS </button> -->
+                <button id="belepes_gomb" onclick="delayReload()">KÜLDÉS</button>
             </div>
 
             <!-- Módosítás: Megjelenítjük a parkolóhely számot vagy az "MEGTELET" üzenetet behajtáskor -->
@@ -193,7 +196,16 @@
 </div>
 
 <script>
-        // JavaScript kód itt
+
+        function delayReload() {
+         // Késleltetés beállítása 5 másodpercig (5000 milliszekundum)
+         setTimeout(function() {
+        // Újratöltés végrehajtása
+          window.location.reload();
+         }, 5000); // 5000 ms = 5 másodperc
+        }
+
+
 
         // Függvény a naplóadatok betöltéséhez a JSON fájlból
         function betoltNaploAdatok() {
