@@ -115,7 +115,7 @@
         }
 
         #also_kontener table {
-            max-height: 300px;
+            max-height: 320px;
             overflow-y: auto;
              overflow-x: auto;
 
@@ -142,29 +142,30 @@
         }
 
         /* Fülek (TAB-ok) stílusa */
-       .tab-container {
-            display: Flex és Center Justify;
+        .tab-container {
+            display: flex;
             justify-content: center;
-
             background-color: #ccc;
-            padding-left: 50px
+             padding-left: 0; /* Korábban 50px volt, de így van jobb elrendezés */
             max-height: 40px;
             overflow-y: auto;
-            margin-left: 10px
-            margin-right:10px
-
+             margin-left: 10px;
+            margin-right: 10px;
         }
 
         .tab {
-            padding: 5px;
-            background-color: #ddd;
-            cursor: pointer;
+            padding: 5px 15px; /* Kitöltés hozzáadva szélességhez */
+             background-color: #ddd;
+             cursor: pointer;
+             flex: 1; /* Minden tab oszlop azonos méretű legyen */
         }
 
         .tab.active {
-            background-color: #fff;
-            padding: 5px
-        }
+             background-color: #333333;
+             color: #fff; /* Betűszín fehér lesz */
+             padding: 5px 15px; /* Kitöltés hozzáadva szélességhez */
+}
+
 
         /* Táblázatok stílusa */
         .table-container {
