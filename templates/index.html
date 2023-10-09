@@ -6,23 +6,18 @@
     <title>Parkolóház</title>
     <style>
         /* CSS stílusok (Formázás) itt */
-        .container {             /*  általános beállítás */
+        .container {
             display: flex;
             justify-content: space-between;
             padding: 10px;
         }
 
-        .container {
-            display: flex;
-            flex-direction: row; /* Alapértelmezett irány (vízszintes) */
-        }
-
         .container > div:first-child {
-            flex: 8; /* A bal konténer 80% szélességet kap */
+            flex: 8;
         }
 
         .container > div:last-child {
-            flex: 2; /* A jobb konténer 20% szélességet kap */
+            flex: 2;
         }
 
         /* Stílus a bal oldali tartalomhoz */
@@ -45,26 +40,29 @@
         }
 
         .also_kontener {
-            height: 230px; /* Fix magasság beállítása */
             border: 1px solid lightgray;
             border-radius: 5px;
             padding: 5px;
-            overflow: auto; /* Görgethetőség engedélyezése */
+            overflow: auto;
             background-color: #f2f2f2;
-            margin-left: 10px;    /* margók, oldalszél */
+            margin-left: 10px;
             margin-right: 10px;
             margin-top: 5px;
+            max-height: 200px;
+            overflow-y: auto;
+            overflow-x: auto; /* Hozzáadva az vízszintes görgetéshez */
         }
+
         body {
-            background-color: white;    /*  az oldal háttérszíne */
+            background-color: white;
         }
 
         table {
-            width: 100%; /* A táblázat kitölti a szülő konténert */
+            width: 100%;
             overflow-y: auto;
         }
 
-        .kartya {         /* parkolóhely kártyák */
+        .kartya {
             background-color: #f2f2f2;
             border: 1px solid #ddd;
             padding: 10px;
@@ -77,19 +75,19 @@
             position: relative;
         }
 
-        .szabad {      /* a szabad kártyák stílusa */
+        .szabad {
             color: green;
             background-color: #e0ffe0;
             border: 2px solid green;
         }
 
-        .foglalt {     /* a foglalt kártyák stílusa */
+        .foglalt {
             color: red;
             border: 2px solid red;
-            background-color: mistyrose; /* Halványabb piros háttérszín */
+            background-color: mistyrose;
         }
 
-        .ikon {    /* A rendszám kártyán található P tábla ikon stílusa */
+        .ikon {
             position: absolute;
             top: 5px;
             right: 5px;
@@ -97,10 +95,10 @@
             height: 10px;
             padding: 10px;
             background-image: url('static/parkolo.png');
-            background-size: cover; /* a kép kitakarja a tartalmat */
+            background-size: cover;
         }
 
-        .tiltott_behajtas {   /* A rendszám kártyán található behajtani tilos tábla ikon stílusa */
+        .tiltott_behajtas {
             position: absolute;
             top: 5px;
             right: 5px;
@@ -111,36 +109,72 @@
             background-size: cover;
         }
 
-        .kartya .rendszam {   /* A parkolóhely száma */
+        .kartya .rendszam {
             font-size: 18px;
             font-weight: bold;
         }
 
-        #also_kontener table {  /* A táblázat max magassága */
-            max-height: 300px ;
-            overflow-y: auto;   /* görgetősáv engedélyezése */
+        #also_kontener table {
+            max-height: 300px;
+            overflow-y: auto;
+             overflow-x: auto;
+
         }
 
-        #naplo_adatok th {     /* a táblázat igazítása balra */
-             text-align: left;
+        #naplo_adatok th {
+            text-align: left;
         }
 
         table, th, td {
-         border: 1px solid #ccc; /* Minden cella és fejléc szegélye 1px vastag szürke */
-         border-collapse: collapse; /* Összeomló hatás a cellák közötti szegélyek kialakításához */
+            border: 1px solid #ccc;
+            border-collapse: collapse;
         }
 
         #rendszam {
-            font-size: 25px; /* Beviteli mező betűmérete */
-            padding:10px;
+            font-size: 25px;
+            padding: 10px;
         }
 
-        #belepes_gomb {           /* gomb méretezése */
-             padding: 10px 20px; /*  (felül/alul, jobbra/balra) */
-             margin-top: 10px;
-             margin-left: 0px;   /* Bal oldali margin 0px */
+        #belepes_gomb {
+            padding: 10px 20px;
+            margin-top: 10px;
+            margin-left: 0px;
         }
 
+        /* Fülek (TAB-ok) stílusa */
+       .tab-container {
+            display: Flex és Center Justify;
+            justify-content: center;
+
+            background-color: #ccc;
+            padding-left: 50px
+            max-height: 40px;
+            overflow-y: auto;
+            margin-left: 10px
+            margin-right:10px
+
+        }
+
+        .tab {
+            padding: 5px;
+            background-color: #ddd;
+            cursor: pointer;
+        }
+
+        .tab.active {
+            background-color: #fff;
+            padding: 5px
+        }
+
+        /* Táblázatok stílusa */
+        .table-container {
+            display: none;
+        }
+
+        .table-container.active {
+            display: block;
+             overflow-y: auto;
+        }
     </style>
 </head>
 <body>
@@ -158,42 +192,69 @@
             <h2>A jármű rendszáma</h2>
             <div>
                 <input type="text" id="rendszam" placeholder="Rendszám" />
-               <!-- <button id="belepes_gomb" onClick="window.location.reload()">KÜLDÉS </button> -->
                 <button id="belepes_gomb" onclick="delayReload()">KÜLDÉS</button>
             </div>
-
-            <!-- Módosítás: Megjelenítjük a parkolóhely számot vagy az "MEGTELET" üzenetet behajtáskor -->
-            <h2> <span id="belepes_kihajtas"></span></h2>
-            <!-- Módosítás: Megjelenítjük a parkolóhely számot vagy az "Ide álljon be:" üzenetet behajtáskor -->
-
-            <!-- Módosítás: Megjelenítjük a fizetendő díjat behajtáskor vagy kihajtáskor -->
+            <h2><span id="belepes_kihajtas"></span></h2>
             <h2><span id="fizetendo_dij"></span></h2>
-            <!-- Díj megjelenítése itt -->
         </div>
     </div>
 
-    <!-- Alsó konténer -->
-    <div class="also_kontener">
-    <h3>Napló adatok</h3>
-    <div style="overflow-x: auto;">
-        <table id="naplo_adatok">
-            <thead>
-                <tr>
-                    <th>Rendszám</th>
-                    <th>Behajtás</th>
-                    <th>Kihajtás</th>
-                    <th>Parkolóhely</th>
-                    <th>Parkolódíj</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- A JSON fájl adatai ide lesznek betöltve JavaScript segítségével -->
-            </tbody>
-        </table>
+    <!-- Fülek (TAB-ok) -->
+    <div class="tab-container">
+        <div class="tab active" id="naplo_tab">Azonnali napló a járműmozgásokról</div>
+        <div style="overflow-x: auto;"></div>
+        <div class="tab" id="egyesitett_naplo_tab">Egyesített napló</div>
     </div>
-</div>
 
-<script>
+    <!-- Táblázatok -->
+    <div class="table-container active" id="naplo_table">
+        <div style="overflow-y: auto;">
+        <div class="also_kontener">
+
+
+                <table id="naplo_adatok">
+    <thead>
+        <tr>
+            <th>Rendszám</th>
+            <th>Behajtás</th>
+            <th>Kihajtás</th>
+            <th>Parkolóhely</th>
+            <th>Parkolódíj</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- A JSON fájl adatai ide lesznek betöltve JavaScript segítségével -->
+    </tbody>
+</table>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="table-container" id="egyesitett_naplo_table">
+        <div class="also_kontener">
+            <h3>Egyesített napló adatok</h3>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rendszám</th>
+                            <th>Behajtás</th>
+                            <th>Kihajtás</th>
+                            <th>Parkolóhely</th>
+                            <th>Parkolódíj</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- A JSON fájl adatai ide lesznek betöltve JavaScript segítségével -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
 
         function delayReload() {
          // Késleltetés beállítása 5 másodpercig (5000 milliszekundum)
@@ -325,7 +386,25 @@
             xhr.send(JSON.stringify({ rendszam: rendszam }));
         });
 
-</script>
+        // Fülek kezelése
+        var naploTab = document.getElementById('naplo_tab');
+        var egyesitettNaploTab = document.getElementById('egyesitett_naplo_tab');
+        var naploTable = document.getElementById('naplo_table');
+        var egyesitettNaploTable = document.getElementById('egyesitett_naplo_table');
 
+        naploTab.addEventListener('click', function() {
+            naploTab.classList.add('active');
+            egyesitettNaploTab.classList.remove('active');
+            naploTable.classList.add('active');
+            egyesitettNaploTable.classList.remove('active');
+        });
+
+        egyesitettNaploTab.addEventListener('click', function() {
+            naploTab.classList.remove('active');
+            egyesitettNaploTab.classList.add('active');
+            naploTable.classList.remove('active');
+            egyesitettNaploTable.classList.add('active');
+        });
+    </script>
 </body>
 </html>
