@@ -7,6 +7,9 @@ app = Flask(__name__, static_url_path='/static')
 # Napló fájl elérési útvonala (módosítva JSON fájlra)
 naplo_file = 'naplo.json'
 
+# Egyesített napló fájl elérési útvonala
+egyesitett_naplo_file = 'egyesitett_naplo.json'
+
 # Parkolóhelyek JSON fájl elérési útvonala
 parkolohelyek_file = 'parkolohelyek.json'
 
@@ -17,6 +20,60 @@ with open(parkolohelyek_file, 'r') as file:
 # Lista az aktuálisan foglalt parkolóhelyekről
 aktuális_parkolohelyek = []
 
+
+# Egyesített napló fájl elérési útvonala
+egyesitett_naplo_file = 'egyesitett_naplo.json'
+
+def frissit_egyesitett_naplo():
+    with open(naplo_file, mode='r') as file:
+        naplo_adatok = [json.loads(line) for line in file]
+
+    with open(egyesitett_naplo_file, mode='r') as file:
+        egyesitett_naplo = [json.loads(line) for line in file]
+
+    for data in naplo_adatok:
+        rendszam = data.get('rendszam')
+        status = data.get('status')
+        parkolodij = data.get('parkolodij')
+
+        if rendszam and status and parkolodij:
+            egyesitett_adat = {
+                "rendszam": rendszam,
+                "parkolohely_szam": None,
+                "belepes_idopont": None,
+                "kihajtas_idopont": None,
+                "parkolodij": None
+            }
+
+            for adat in egyesitett_naplo:
+                if adat["rendszam"] == rendszam and adat["kihajtas_idopont"] is None:
+                    egyesitett_adat = adat
+                    break
+
+            if 'parkolohely' in data:
+                egyesitett_adat["parkolohely_szam"] = data.get("parkolohely")
+            elif 'parkolohely_szam' in data:
+                egyesitett_adat["parkolohely_szam"] = data.get("parkolohely_szam")
+
+            if status == "Behajtás":
+                egyesitett_adat["parkolodij"] = 0
+                if 'parkolohely' in data:
+                    egyesitett_adat["parkolohely_szam"] = foglal_parkolohely(rendszam)
+                egyesitett_adat["belepes_idopont"] = data.get("idopont")
+            elif status == "Kihajtás":
+                egyesitett_adat["kihajtas_idopont"] = data.get("idopont")
+                egyesitett_adat["parkolodij"] = parkolodij
+            elif status == "Behajtás":
+                egyesitett_adat["belepes_idopont"] = data.get("idopont")
+
+            if not egyesitett_adat in egyesitett_naplo:
+                egyesitett_naplo.append(egyesitett_adat)
+
+    with open(egyesitett_naplo_file, mode='w') as file:
+        for adat in egyesitett_naplo:
+            file.write(json.dumps(adat) + '\n')
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -25,7 +82,7 @@ def index():
 def api_ellenorzes():
     try:
         data = request.get_json()
-        rendszam = data.get('rendszam', '').upper() #nagybetűsítés
+        rendszam = data.get('rendszam', '').upper()
 
         for hely in parkolohelyek['parkolohelyek']:
             if hely['rendszam'] == rendszam:
@@ -36,6 +93,7 @@ def api_ellenorzes():
                 hely['rendszam'] = ''
                 with open(parkolohelyek_file, 'w') as json_file:
                     json.dump(parkolohelyek, json_file, indent=4)
+                frissit_egyesitett_naplo()
                 return jsonify({"status": "Kihajtás", "dij": fizetendo_dij})
 
         for hely in parkolohelyek['parkolohelyek']:
@@ -45,6 +103,7 @@ def api_ellenorzes():
                 naplozas(rendszam, hely['szam'], "Behajtás", 0)
                 with open(parkolohelyek_file, 'w') as json_file:
                     json.dump(parkolohelyek, json_file, indent=4)
+                frissit_egyesitett_naplo()
                 return jsonify({"parkolohely_szam": hely['szam'], "status": "Behajtás"})
 
         return jsonify({"status": "Teltház"})
@@ -75,7 +134,7 @@ def szamol_dij(azonosito):
         parkolas_idotartama = (most - elozo_belepes_idopont).total_seconds()
         fizetendo_dij = parkolas_idotartama * 1  # Minden másodperc után 1 Ft (módosítottuk)
     else:
-        fizetendo_dij = 0  # Ha nincs előző belépés, nincs díj
+        fizetendo_dij = 0
 
     return int(fizetendo_dij)
 

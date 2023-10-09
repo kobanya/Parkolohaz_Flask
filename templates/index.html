@@ -59,14 +59,10 @@
             background-color: white;    /*  az oldal háttérszíne */
         }
 
-
-
         table {
             width: 100%; /* A táblázat kitölti a szülő konténert */
             overflow-y: auto;
         }
-
-
 
         .kartya {         /* parkolóhely kártyák */
             background-color: #f2f2f2;
@@ -118,24 +114,27 @@
         .kartya .rendszam {   /* A parkolóhely száma */
             font-size: 18px;
             font-weight: bold;
-
         }
+
         #also_kontener table {  /* A táblázat max magassága */
             max-height: 300px ;
             overflow-y: auto;   /* görgetősáv engedélyezése */
         }
+
         #naplo_adatok th {     /* a táblázat igazítása balra */
              text-align: left;
         }
+
         table, th, td {
          border: 1px solid #ccc; /* Minden cella és fejléc szegélye 1px vastag szürke */
          border-collapse: collapse; /* Összeomló hatás a cellák közötti szegélyek kialakításához */
         }
+
         #rendszam {
             font-size: 25px; /* Beviteli mező betűmérete */
             padding:10px;
-
         }
+
         #belepes_gomb {           /* gomb méretezése */
              padding: 10px 20px; /*  (felül/alul, jobbra/balra) */
              margin-top: 10px;
@@ -166,7 +165,6 @@
             <!-- Módosítás: Megjelenítjük a parkolóhely számot vagy az "MEGTELET" üzenetet behajtáskor -->
             <h2> <span id="belepes_kihajtas"></span></h2>
             <!-- Módosítás: Megjelenítjük a parkolóhely számot vagy az "Ide álljon be:" üzenetet behajtáskor -->
-
 
             <!-- Módosítás: Megjelenítjük a fizetendő díjat behajtáskor vagy kihajtáskor -->
             <h2><span id="fizetendo_dij"></span></h2>
@@ -200,12 +198,10 @@
         function delayReload() {
          // Késleltetés beállítása 5 másodpercig (5000 milliszekundum)
          setTimeout(function() {
-        // Újratöltés végrehajtása
+         // Újratöltés végrehajtása
           window.location.reload();
-         }, 5000); // 5000 ms = 5 másodperc
-        }
-
-
+         }, 5000);       // 5000 ms = 5 másodperc
+         }
 
         // Függvény a naplóadatok betöltéséhez a JSON fájlból
         function betoltNaploAdatok() {
