@@ -1,0 +1,171 @@
+ /* CSS stílusok (Formázás) itt */
+        .container {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+        }
+
+        .container > div:first-child {
+            flex: 8;
+        }
+
+        .container > div:last-child {
+            flex: 2;
+        }
+
+        /* Stílus a bal oldali tartalomhoz */
+        .bal_oldal {
+            flex: 1;
+            padding-left: 10px;
+            border: 1px solid lightgray;
+            border-radius: 5px;
+            margin-right: 10px;
+            background-color: #f2f2f2;
+        }
+
+        /* Stílus a jobb oldali tartalomhoz */
+        .jobb_oldal {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid lightgray;
+            border-radius: 5px;
+            background-color: #f2f2f2;
+        }
+
+        .also_kontener {
+            border: 1px solid lightgray;
+            border-radius: 5px;
+            padding: 5px;
+            overflow: auto;
+            background-color: #f2f2f2;
+            margin-left: 10px;
+            margin-right: 10px;
+            margin-top: 5px;
+            max-height: 200px;
+            overflow-y: auto;
+            overflow-x: auto; /* Hozzáadva az vízszintes görgetéshez */
+        }
+
+        body {
+            background-color: white;
+        }
+
+        table {
+            width: 100%;
+            overflow-y: auto;
+        }
+
+        .kartya {
+            background-color: #f2f2f2;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 10px;
+            width: 200px;
+            height: 70px;
+            display: inline-block;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .szabad {
+            color: green;
+            background-color: #e0ffe0;
+            border: 2px solid green;
+        }
+
+        .foglalt {
+            color: red;
+            border: 2px solid red;
+            background-color: mistyrose;
+        }
+
+        .ikon {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 10px;
+            height: 10px;
+            padding: 10px;
+            background-image: url('static/parkolo.png');
+            background-size: cover;
+        }
+
+        .tiltott_behajtas {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 10px;
+            height: 10px;
+            padding: 10px;
+            background-image: url('static/behajtani_tilos.png');
+            background-size: cover;
+        }
+
+        .kartya .rendszam {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        #also_kontener table {
+            max-height: 320px;
+            overflow-y: auto;
+             overflow-x: auto;
+
+        }
+
+        #naplo_adatok th {
+            text-align: left;
+        }
+
+        table, th, td {
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+        }
+
+        #rendszam {
+            font-size: 25px;
+            padding: 10px;
+        }
+
+        #belepes_gomb {
+            padding: 10px 20px;
+            margin-top: 10px;
+            margin-left: 0px;
+        }
+
+        /* Fülek (TAB-ok) stílusa */
+        .tab-container {
+            display: flex;
+            justify-content: center;
+            background-color: #ccc;
+             padding-left: 0; /* Korábban 50px volt, de így van jobb elrendezés */
+            max-height: 40px;
+            overflow-y: auto;
+             margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        .tab {
+            padding: 5px 15px; /* Kitöltés hozzáadva szélességhez */
+             background-color: #ddd;
+             cursor: pointer;
+             flex: 1; /* Minden tab oszlop azonos méretű legyen */
+        }
+
+        .tab.active {
+             background-color: #333333;
+             color: #fff; /* Betűszín fehér lesz */
+             padding: 5px 15px; /* Kitöltés hozzáadva szélességhez */
+}
+
+
+        /* Táblázatok stílusa */
+        .table-container {
+            display: none;
+        }
+
+        .table-container.active {
+            display: block;
+             overflow-y: auto;
+        }
