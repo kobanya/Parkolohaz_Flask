@@ -87,7 +87,7 @@
             width: 10px;
             height: 10px;
             padding: 10px;
-            background-image: url('static/parkolo.png');
+            background-image: url('/static/parkolo.png');
             background-size: cover;
         }
 
@@ -98,7 +98,7 @@
             width: 10px;
             height: 10px;
             padding: 10px;
-            background-image: url('static/behajtani_tilos.png');
+            background-image: url('/static/behajtani_tilos.png');
             background-size: cover;
         }
 
@@ -168,4 +168,4 @@
         .table-container.active {
             display: block;
              overflow-y: auto;
-        }
+        }        }
