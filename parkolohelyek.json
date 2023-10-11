@@ -7,8 +7,8 @@
         },
         {
             "szam": "P2",
-            "foglalt": true,
-            "rendszam": "DKL"
+            "foglalt": false,
+            "rendszam": ""
         },
         {
             "szam": "P3",
@@ -18,7 +18,7 @@
         {
             "szam": "P4",
             "foglalt": true,
-            "rendszam": "GGG888"
+            "rendszam": "OPL485"
         },
         {
             "szam": "P5",
@@ -32,8 +32,8 @@
         },
         {
             "szam": "P7",
-            "foglalt": false,
-            "rendszam": ""
+            "foglalt": true,
+            "rendszam": "TTT879"
         },
         {
             "szam": "P8",
