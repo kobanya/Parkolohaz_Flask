@@ -6,8 +6,7 @@ app = Flask(__name__, static_url_path='/static')
 
 # Napló fájl elérési útvonala (módosítva JSON fájlra)
 naplo_file = 'naplo.json'
-
-# Egyesített napló fájl elérési útvonala
+# Egyesített napló fájl elérési útvonala (módosítva JSON fájlra)
 egyesitett_naplo_file = 'egyesitett_naplo.json'
 
 # Parkolóhelyek JSON fájl elérési útvonala
@@ -18,23 +17,24 @@ with open(parkolohelyek_file, 'r') as file:
     parkolohelyek = json.load(file)
 
 # Lista az aktuálisan foglalt parkolóhelyekről
-aktuális_parkolohelyek = []
-
-
-# Egyesített napló fájl elérési útvonala
-egyesitett_naplo_file = 'egyesitett_naplo.json'
-
+aktualis_parkolohelyek = []
+bent = []     # Balázs javítása
 def frissit_egyesitett_naplo():
-    with open(naplo_file, mode='r') as file:
+    global be_idopont
+    with open(naplo_file, mode='r', encoding='utf8') as file:
         naplo_adatok = [json.loads(line) for line in file]
 
-    with open(egyesitett_naplo_file, mode='r') as file:
+    with open(egyesitett_naplo_file, mode='r', encoding='utf8') as file:
         egyesitett_naplo = [json.loads(line) for line in file]
 
     for data in naplo_adatok:
         rendszam = data.get('rendszam')
         status = data.get('status')
         parkolodij = data.get('parkolodij')
+        idopont = data.get('idopont')
+        if status == 'Behajtás':
+            behajtasok_list = [rendszam, idopont]
+            bent.append(behajtasok_list)
 
         if rendszam and status and parkolodij:
             egyesitett_adat = {
@@ -44,39 +44,50 @@ def frissit_egyesitett_naplo():
                 "kihajtas_idopont": None,
                 "parkolodij": None
             }
+            if status == 'Kihajtás':
+                for adat in egyesitett_naplo:
+                    if adat["rendszam"] == rendszam and adat["kihajtas_idopont"] is None:
+                        egyesitett_adat = adat
+                        break
 
-            for adat in egyesitett_naplo:
-                if adat["rendszam"] == rendszam and adat["kihajtas_idopont"] is None:
-                    egyesitett_adat = adat
-                    break
-
-            if 'parkolohely' in data:
-                egyesitett_adat["parkolohely_szam"] = data.get("parkolohely")
-            elif 'parkolohely_szam' in data:
-                egyesitett_adat["parkolohely_szam"] = data.get("parkolohely_szam")
-
-            if status == "Behajtás":
-                egyesitett_adat["parkolodij"] = 0
                 if 'parkolohely' in data:
-                    egyesitett_adat["parkolohely_szam"] = foglal_parkolohely(rendszam)
-                egyesitett_adat["belepes_idopont"] = data.get("idopont")
-            elif status == "Kihajtás":
-                egyesitett_adat["kihajtas_idopont"] = data.get("idopont")
-                egyesitett_adat["parkolodij"] = parkolodij
-            elif status == "Behajtás":
-                egyesitett_adat["belepes_idopont"] = data.get("idopont")
+                    egyesitett_adat["parkolohely_szam"] = data.get("parkolohely")
+                elif 'parkolohely_szam' in data:
+                    egyesitett_adat["parkolohely_szam"] = data.get("parkolohely_szam")
 
-            if not egyesitett_adat in egyesitett_naplo:
-                egyesitett_naplo.append(egyesitett_adat)
+                if status == "Behajtás":
+                    egyesitett_adat["parkolodij"] = 0
+                    if 'parkolohely' in data:
+                        egyesitett_adat["parkolohely_szam"] = foglal_parkolohely(rendszam)
 
-    with open(egyesitett_naplo_file, mode='w') as file:
-        for adat in egyesitett_naplo:
-            file.write(json.dumps(adat) + '\n')
+                elif status == "Kihajtás":
+                    for i in bent:
+                        if i[0] == rendszam:
+                            be_idopont = []
+                            be_idopont.append(i[1])
+                    egyesitett_adat["kihajtas_idopont"] = idopont
+                    egyesitett_adat["belepes_idopont"] = be_idopont[-1]
+                    egyesitett_adat["parkolodij"] = parkolodij
 
+                if not egyesitett_adat in egyesitett_naplo:
+                    egyesitett_naplo.append(egyesitett_adat)
+
+        with open(egyesitett_naplo_file, mode='w', encoding='utf8') as file:
+            for adat in egyesitett_naplo:
+                file.write(json.dumps(adat, ensure_ascii=False) + '\n')
 
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/egyesitett_naplo', methods=['GET'])
+def get_egyesitett_naplo():
+    try:
+        with open(egyesitett_naplo_file, 'r') as file:
+            egyesitett_naplo = json.load(file)
+        return jsonify(egyesitett_naplo)
+    except Exception as e:
+        return jsonify({"error": str(e)})
 
 @app.route('/ellenorzes', methods=['POST'])
 def api_ellenorzes():
@@ -115,7 +126,7 @@ def foglal_parkolohely(rendszam):
         if not hely['foglalt']:
             hely['foglalt'] = True
             hely['rendszam'] = rendszam
-            aktuális_parkolohelyek.append(rendszam)
+            aktualis_parkolohelyek.append(rendszam)
             return hely['szam']
     return None
 
