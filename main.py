@@ -95,6 +95,9 @@ def api_ellenorzes():
         data = request.get_json()
         rendszam = data.get('rendszam', '').upper()
 
+        if len(rendszam) < 6:
+            return jsonify({"error": "A rendszámnak legalább 6 karakter hosszúnak kell lennie."}), 400
+
         for hely in parkolohelyek['parkolohelyek']:
             if hely['rendszam'] == rendszam:
                 parkolohely_szam = hely['szam']
