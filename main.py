@@ -133,24 +133,29 @@ def foglal_parkolohely(rendszam):
             return hely['szam']
     return None
 
+from datetime import datetime
+
 def szamol_dij(azonosito):
     most = datetime.now()
     elozo_belepes_idopont = None
 
     with open(naplo_file, mode='r') as file:
+        legkozelebbi_belepes_idopont = None  # Inicializálj egy változót a legközelebbi behajtás idejének tárolására
         for line in file:
             data = json.loads(line)
             if data["rendszam"] == azonosito and data["status"] == "Behajtás":
-                elozo_belepes_idopont = datetime.strptime(data["idopont"], "%Y-%m-%d %H:%M:%S")
-                break
+                belepes_idopont = datetime.strptime(data["idopont"], "%Y-%m-%d %H:%M:%S")
+                if not legkozelebbi_belepes_idopont or belepes_idopont > legkozelebbi_belepes_idopont:
+                    legkozelebbi_belepes_idopont = belepes_idopont
 
-    if elozo_belepes_idopont:
-        parkolas_idotartama = (most - elozo_belepes_idopont).total_seconds()
-        fizetendo_dij = parkolas_idotartama * 1  # Minden másodperc után 1 Ft (módosítottuk)
-    else:
-        fizetendo_dij = 0
+        if legkozelebbi_belepes_idopont:
+            parkolas_idotartama = (most - legkozelebbi_belepes_idopont).total_seconds()
+            fizetendo_dij = parkolas_idotartama * 1  # Minden másodperc után 1 Ft (módosítottuk)
+        else:
+            fizetendo_dij = 0
 
-    return int(fizetendo_dij)
+        return int(fizetendo_dij)
+
 
 def naplozas(rendszam, parkolohely, status, parkolodij):
     idopont = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
